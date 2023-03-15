@@ -1,0 +1,56 @@
+STACK SEGMENT STACK
+    DW 256 DUP(?)
+    TOP LABEL WORD
+STACK ENDS
+DATA SEGMENT
+    DATABUF DW 10
+        X = 17
+    REPT 10
+        X = (X+17) MOD 13
+        DB X
+    ENDM
+DATA ENDS
+CODE SEGMENT
+ASSUME CS:CODE, DS:DATA, ES:DATA, SS:STACK
+START:
+    MOV AX, DATA
+    MOV DX, AX
+    MOV ES, AX
+    MOV AX, STACK
+    MOV SS, AX
+    LEA SP, TOP
+    ; 用户程序
+    MOV CX, DATABUF
+    DEC CX
+    
+L1: LEA SI, DATABUF
+    LEA DI, DATABUF
+    MOV BX, 12
+    SUB BX, CX
+    ADD SI, BX
+    ADD DI, BX
+    INC DI
+    PUSH CX
+L2: MOV AL, [SI]
+    CMP AL, [DI]
+    JB NOCHG
+CHG:
+    MOV AH, AL
+    MOV AL, [DI]
+    MOV [DI], AH
+    MOV [SI], AL
+NOCHG:
+    INC SI
+    INC DI
+    LOOP L2
+
+    POP CX
+    LOOP L1
+    
+    
+EXIT:
+    MOV AL, 4CH
+    INT 21H
+    
+CODE ENDS
+END START

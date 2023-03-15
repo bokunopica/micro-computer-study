@@ -1,0 +1,63 @@
+STACK SEGMENT STACK
+    DB 256 DUP(?)
+STACK ENDS
+DATA SEGMENT
+    BUFFER1 DW 200 DUP(?)
+    BUFFER2 DB 256 DUP(?)
+DATA ENDS
+
+CODE SEGMENT
+    ASSUME CS:CODE, DS:DATA, ES:DATA, SS:STACK
+START:
+    MOV AX, DATA
+    MOV DS, AX
+    MOV ES, AX
+
+    
+    LEA DI, BUFFER1
+    MOV CX, 200
+    MOV AX, 0000H
+    CLD
+    REP STOSW
+
+    
+    LEA DI, BUFFER2
+    MOV CX, 256
+    MOV AL, 55H
+    CLD
+    REP STOSB
+
+
+    MOV AH, 4CH
+    INT 21H 
+    ; CALL EXIT
+
+    ; LEA BX, BUFFER1
+    ; INC BX
+    ; CALL PUTN
+
+    ; LEA BX, BUFFER2
+    ; INC BX
+    ; CALL PUTN
+    ; CALL EXIT
+    
+
+
+    ; EXIT PROC
+    ;     MOV AX, 4CH
+    ;     INT 21H 
+    ; EXIT ENDP
+
+    ; PUTN PROC
+    ;     PUSH DX
+    ;     PUSH AX
+    ;     MOV AL, [BX]
+    ;     MOV BYTE PTR PUTN_CHAR, AL
+    ;     MOV DX, OFFSET PUTN_CHAR
+    ;     MOV AH, 9
+    ;     INT 21H
+    ;     POP AX
+    ;     POP DX
+    ; PUTN ENDP
+CODE ENDS
+END START

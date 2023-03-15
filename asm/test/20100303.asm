@@ -1,0 +1,47 @@
+STACK SEGMENT STACK
+    DB 256 DUP(?)
+STACK ENDS
+DATA SEGMENT
+    ARRAY DB 'Computer$'
+    NUM DW 0
+    SHOW DB '0$'
+DATA ENDS
+CODE SEGMENT
+ASSUME CS:CODE, DS:DATA, SS:STACK, ES:DATA
+START:
+    MOV AX, DATA
+    MOV DS, AX
+    MOV ES, AX
+    MOV AX, OFFSET ARRAY
+    PUSH AX
+    CALL FAR PTR STRLEN
+    MOV NUM, AX
+
+    ADD AX, '0'
+    MOV SHOW, AL
+    MOV DX, OFFSET SHOW
+    MOV AH, 9
+    INT 21H
+    
+EXIT: MOV AH, 4CH
+    INT 21H
+
+    STRLEN PROC FAR
+        PUSH BP
+        MOV BP, SP
+        PUSH SI
+        MOV SI, [BP+6]
+    NEXT: CMP BYTE PTR[SI], '$'
+        JZ DONE
+        INC SI
+        JMP NEXT
+    DONE: MOV AX, SI
+        SUB AX, [BP+6]
+        POP SI
+        POP BP
+        RET
+    STRLEN ENDP
+CODE ENDS
+END START
+
+
