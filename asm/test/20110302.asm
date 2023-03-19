@@ -15,10 +15,11 @@ START:
     MOV ES, AX
     LEA DI, BUF
     MOV CX, CNT
-    cld
+    CLD
     MOV AL, DAT
     REPNZ SCASB
 
+    ADD CL, '0'
     MOV BYTE PTR VAR1, CL
     MOV DX, OFFSET VAR1
     MOV AH, 9
