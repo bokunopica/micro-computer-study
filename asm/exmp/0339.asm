@@ -14,7 +14,7 @@ START:
     MOV ES, AX
 
     
-    LEA DI, BUFFER1
+    LEA DI, BUFFER1 
     MOV CX, 200
     MOV AX, 0000H
     CLD
